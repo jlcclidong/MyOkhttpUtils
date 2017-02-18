@@ -3,6 +3,7 @@ package com.eason.jlccl.myokhttputils;
 import android.app.Application;
 
 import com.eason.jlccl.httputils.Ok;
+import com.eason.jlccl.httputils.logInterCeptor.LogInterceptor;
 import com.eason.jlccl.httputils.persistentcookiejar.PersistentCookieJar;
 import com.eason.jlccl.httputils.persistentcookiejar.cache.SetCookieCache;
 import com.eason.jlccl.httputils.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
@@ -20,8 +21,10 @@ public class App extends Application {
         Ok.init()
                 .connectTimeout(1000l, TimeUnit.MILLISECONDS)
                 .readTimeout(1000l, TimeUnit.MILLISECONDS)
-                .logInterceptor("eason", true)
+                .NetWorkInterceptor("eason", true, new LogInterceptor())
                 .CookieJar(new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(App.this)))
+                .commonHeader("li", "dong")
+                .commonParams("haha", "haha")
                 .build();
     }
 }

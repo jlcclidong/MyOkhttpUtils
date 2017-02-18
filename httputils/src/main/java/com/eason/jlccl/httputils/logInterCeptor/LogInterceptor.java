@@ -18,25 +18,26 @@ import okhttp3.ResponseBody;
 public class LogInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
-        Log.e("============request=start===============");
+        Log.e("============request start===============");
         Request request = chain.request();
-        Log.e("url:"+ request.url());
-        Log.e("method:"+request.method());
-        Log.e("headers:"+request.headers().toString());
-        Log.e("============request=end=================");
+        Log.e("url:" + request.url());
+        Log.e("method:" + request.method());
+        Log.e("headers:" + request.headers().toString());
+        Log.e("============request end=================");
         Response response = chain.proceed(request);
-        Log.e("============response=start==============");
-        Log.e("Request:"+ response.code());
-        Log.e("message:"+response.message());
-        Log.e("headers:"+response.headers().toString());
-        Log.e("============response=end================");
-        Log.e("============response=body===============");
+        Log.e("============response start==============");
+        Log.e("responseurl:" + response.request().url());
+        Log.e("response code:" + response.code());
+        Log.e("message:" + response.message());
+        Log.e("headers:" + response.headers().toString());
+        Log.e("============response end================");
+        Log.e("============response body===============");
         String content = response.body().string();
         Log.e(JsonFormat.formatJson(content));
-        Log.e("============response=body===============");
-        //request中body()只能获取一次只能重新编写一个response给结果
+        Log.e("============response body===============");
+//        request中body()只能获取一次只能重新编写一个response给结果
         return response.newBuilder()
-                .body(ResponseBody.create(response.body().contentType(),content))
+                .body(ResponseBody.create(response.body().contentType(), content))
                 .build();
     }
 }
