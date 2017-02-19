@@ -18,13 +18,11 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Ok.init()
+        Ok.init(this)
                 .connectTimeout(1000l, TimeUnit.MILLISECONDS)
                 .readTimeout(1000l, TimeUnit.MILLISECONDS)
-                .NetWorkInterceptor("eason", true, new LogInterceptor())
+                .AppInterceptor("eason", true, new LogInterceptor())
                 .CookieJar(new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(App.this)))
-                .commonHeader("li", "dong")
-                .commonParams("haha", "haha")
                 .build();
     }
 }
