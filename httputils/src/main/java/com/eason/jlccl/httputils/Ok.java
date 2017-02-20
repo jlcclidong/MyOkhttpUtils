@@ -73,15 +73,15 @@ public class Ok {
             return this;
         }
 
-        public Builder NetWorkInterceptor(String tag, boolean isShow, Interceptor interceptor) {
+        public Builder NetWorkInterceptor(String tag, Interceptor interceptor) {
             Log.TAG = tag;
-            if (isShow) builder.addNetworkInterceptor(interceptor);
+            builder.addNetworkInterceptor(interceptor);
             return this;
         }
 
-        public Builder AppInterceptor(String tag, boolean isShow, Interceptor interceptor) {
+        public Builder AppInterceptor(String tag, Interceptor interceptor) {
             Log.TAG = tag;
-            if (isShow) builder.addNetworkInterceptor(interceptor);
+            builder.addInterceptor(interceptor);
             return this;
         }
 

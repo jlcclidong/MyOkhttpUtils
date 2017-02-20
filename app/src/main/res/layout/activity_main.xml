@@ -26,5 +26,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="post" />
+
+        <Button
+            android:id="@+id/post1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="post" />
     </LinearLayout>
 </RelativeLayout>
