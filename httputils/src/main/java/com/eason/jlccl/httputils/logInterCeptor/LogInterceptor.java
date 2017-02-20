@@ -20,53 +20,15 @@ import okhttp3.ResponseBody;
  */
 
 public class LogInterceptor implements Interceptor {
-    private String tag = "eason";
-    private boolean showResponse = true;
 
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
         logForRequest(request);
         Response response = chain.proceed(request);
-//
         return logForResponse(response);
     }
 
-    private Response logForResponse(Response response) {
-        try {
-            Log.e("============response start==============");
-            Response copy = response.newBuilder().build();
-
-            Log.e("responseurl:" + copy.request().url());
-            Log.e("response code:" + copy.code());
-            if (!TextUtils.isEmpty(copy.message()))
-                Log.e("message:" + copy.message());
-            if (copy.headers() != null && copy.headers().size() > 0)
-                Log.e("headers:" + copy.headers().toString());
-            Log.e("============response end================");
-            ResponseBody body = copy.body();
-            if (body != null) {
-                MediaType mediaType = body.contentType();
-                if (mediaType != null) {
-                    Log.e("Content-type:" + mediaType.toString());
-                    if (isText(mediaType)) {
-                        Log.e("============response body===============");
-                        String content = body.string();
-                        Log.e(JsonFormat.formatJson(content));
-                        Log.e("============response body===============");
-                        return response.newBuilder().body(ResponseBody.create(mediaType, content)).build();
-                    } else {
-                        Log.e(" maybe response content too large too print , ignored!");
-                    }
-                }
-            } else {
-                Log.e(" body is null , ignored!");
-            }
-        } catch (Exception e) {
-
-        }
-        return response;
-    }
 
     private void logForRequest(Request request) {
         try {
@@ -80,6 +42,44 @@ public class LogInterceptor implements Interceptor {
             Log.e("log request has something worng!!");
         }
     }
+
+    private Response logForResponse(Response response) {
+        try {
+            Log.e("============response start==============");
+            //response.body().string()只能调用一次 body()就会关掉
+            //每次使用前都clone一份使用保证原来的body没有被关掉
+            Response copy = response.newBuilder().build();
+            Log.e("responseurl:" + copy.request().url());
+            Log.e("response code:" + copy.code());
+            if (!TextUtils.isEmpty(copy.message()))
+                Log.e("message:" + copy.message());
+            if (copy.headers() != null && copy.headers().size() > 0)
+                Log.e("headers:" + copy.headers().toString());
+            Log.e("============response end================");
+            ResponseBody body = copy.body();
+            if (body != null) {
+                MediaType mediaType = body.contentType();
+                if (mediaType != null) {
+                    Log.e("============response body===============");
+                    Log.e("Content-type:" + mediaType.toString());
+                    if (isText(mediaType)) {
+                        String content = body.string();
+                        Log.e(JsonFormat.formatJson(content));
+                        Log.e("============response body===============");
+                        return response.newBuilder().body(ResponseBody.create(mediaType, content)).build();
+                    } else {
+                        Log.e(" maybe response content too large too print , ignored!");
+                    }
+                }
+            } else {
+                Log.e(" body is null , ignored!");
+            }
+        } catch (Exception e) {
+            Log.e("log response has something worng!!");
+        }
+        return response;
+    }
+
 
     private boolean isText(MediaType mediaType) {
         if (mediaType.type() != null && mediaType.type().equals("text")) {

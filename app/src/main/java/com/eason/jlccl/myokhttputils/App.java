@@ -21,7 +21,7 @@ public class App extends Application {
         Ok.init(this)
                 .connectTimeout(1000l, TimeUnit.MILLISECONDS)
                 .readTimeout(1000l, TimeUnit.MILLISECONDS)
-                .AppInterceptor("eason", true, new LogInterceptor())
+                .AppInterceptor("eason", new LogInterceptor())
                 .CookieJar(new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(App.this)))
                 .build();
     }

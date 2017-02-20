@@ -44,6 +44,31 @@ public abstract class BaseRequest<T extends BaseRequest> {
         return (T) this;
     }
 
+    public T param(String key, boolean value) {
+        params.add(new Param(key, String.valueOf(value)));
+        return (T) this;
+    }
+
+    public T param(String key, int value) {
+        params.add(new Param(key, String.valueOf(value)));
+        return (T) this;
+    }
+
+    public T param(String key, long value) {
+        params.add(new Param(key, String.valueOf(value)));
+        return (T) this;
+    }
+
+    public T param(String key, float value) {
+        params.add(new Param(key, String.valueOf(value)));
+        return (T) this;
+    }
+
+    public T param(String key, double value) {
+        params.add(new Param(key, String.valueOf(value)));
+        return (T) this;
+    }
+
     public T header(String key, String value) {
         headers.put(key, value);
         return (T) this;
@@ -71,10 +96,11 @@ public abstract class BaseRequest<T extends BaseRequest> {
 
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
+                final String content = response.body().string();
                 Ok.getmHandler().post(new Runnable() {
                     @Override
                     public void run() {
-                        callBack.success(response);
+                        callBack.success(content);
                     }
                 });
             }

@@ -6,18 +6,14 @@ import android.view.View;
 import android.widget.Button;
 
 import com.eason.jlccl.httputils.Ok;
+import com.eason.jlccl.httputils.request.CallBack;
 
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
     private Button mGet;
+    private Button mPost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,26 +21,50 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mGet = (Button) findViewById(R.id.get);
         mGet.setOnClickListener(new View.OnClickListener() {
+
+
             @Override
             public void onClick(View view) {
-                final OkHttpClient instance = Ok.getInstance();
-                final Request request = new Request.Builder().get().url("https://www.baidu.com").build();
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        instance.newCall(request).enqueue(new Callback() {
+                Ok.get()
+                        .url("https://wish.yuntigao.net/app/get-user-info")
+                        .build()
+                        .call(new CallBack() {
                             @Override
-                            public void onFailure(Call call, IOException e) {
+                            public void fail() {
 
                             }
 
                             @Override
-                            public void onResponse(Call call, Response response) throws IOException {
+                            public void success(Response s) {
+                                mGet.setText("success");
                             }
                         });
-                    }
-                }).start();
             }
+        });
+        mPost = (Button) findViewById(R.id.post);
+        mPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Ok.post()
+                        .url("https://wish.yuntigao.net/app/SystemLogin")
+                        .param("j_username", "dxf")
+                        .param("j_password", "1")
+                        .build()
+                        .call(new CallBack() {
+                            @Override
+                            public void fail() {
+
+                            }
+
+                            @Override
+                            public void success(Response s) {
+
+                            }
+                        });
+            }
+
         });
     }
 }
+
+
