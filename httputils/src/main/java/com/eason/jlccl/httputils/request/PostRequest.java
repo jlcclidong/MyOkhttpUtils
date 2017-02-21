@@ -10,7 +10,6 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import okhttp3.FormBody;
 import okhttp3.MediaType;
@@ -26,13 +25,7 @@ public class PostRequest extends BaseParamRequest<PostRequest> {
     private List<FileParam> files;
 
     @Override
-    public PostRequest build() {
-        Request.Builder request = new Request.Builder().url(url);
-        if (headers != null) {
-            for (Map.Entry<String, String> header : headers.entrySet()) {
-                request.header(header.getKey(), header.getValue());
-            }
-        }
+    protected void buildBody(Request.Builder requestbuilder) {
         RequestBody requestBody;
         if (files != null && files.size() > 0) {
             MultipartBody.Builder builder = new MultipartBody.Builder()
@@ -60,8 +53,7 @@ public class PostRequest extends BaseParamRequest<PostRequest> {
             }
             requestBody = builder.build();
         }
-        super.request = request.post(requestBody).build();
-        return this;
+        super.request = requestbuilder.url(url).post(requestBody).build();
     }
 
     /**

@@ -24,6 +24,7 @@ public abstract class BaseRequest<T extends BaseRequest> {
     protected LinkedHashMap<String, String> headers;
     protected String url;
     protected Request request;
+    protected Object tag;
 
     public BaseRequest() {
         params = new ArrayList<>();
@@ -46,29 +47,54 @@ public abstract class BaseRequest<T extends BaseRequest> {
         return (T) this;
     }
 
-    public abstract T build();
+    public T tag(Object tag) {
+        this.tag = tag;
+        return (T) this;
+    }
 
+    public T build() {
+        Request.Builder requestbuilder = new Request.Builder().tag(tag);
+        if (headers != null) {
+            for (Map.Entry<String, String> header : headers.entrySet()) {
+                requestbuilder.header(header.getKey(), header.getValue());
+            }
+        }
+        buildBody(requestbuilder);
+        return (T) this;
+    }
+
+    /**
+     * 各子类实现body体的封装
+     *
+     * @param requestbuilder
+     */
+    protected abstract void buildBody(Request.Builder requestbuilder);
+
+    /**
+     * 请求回调
+     *
+     * @param callBack callback返回String结果 jsonCallBack返回Gson解析对象
+     */
     public void call(final CallBack callBack) {
         Ok.getInstance().newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, final IOException e) {
-                Ok.getmHandler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        callBack.fail(e);
-                    }
-                });
+                e.printStackTrace();
             }
 
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
-                final String content = response.body().string();
-                Ok.getmHandler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        callBack.success(content);
-                    }
-                });
+                if (response.isSuccessful()) {
+                    final String content = response.body().string();
+                    Ok.getmHandler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            callBack.success(content);
+                        }
+                    });
+                } else {
+                    callBack.fail(response);
+                }
             }
         });
     }

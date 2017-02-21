@@ -2,8 +2,6 @@ package com.eason.jlccl.httputils.request;
 
 import com.eason.jlccl.httputils.headerparams.Param;
 
-import java.util.Map;
-
 import okhttp3.Request;
 
 /**
@@ -13,13 +11,7 @@ import okhttp3.Request;
 public class GetRequest extends BaseParamRequest<GetRequest> {
 
     @Override
-    public GetRequest build() {
-        Request.Builder request = new Request.Builder().get();
-        if (headers != null) {
-            for (Map.Entry<String, String> header : headers.entrySet()) {
-                request.header(header.getKey(), header.getValue());
-            }
-        }
+    protected void buildBody(Request.Builder requestbuilder) {
         if (params != null && params.size() > 0) {
             for (int i = 0; i < params.size(); i++) {
                 Param param = params.get(i);
@@ -31,8 +23,7 @@ public class GetRequest extends BaseParamRequest<GetRequest> {
                 url += param.getKey() + "=" + param.getValue();
             }
         }
-        request.url(url);
-        super.request = request.build();
-        return this;
+        requestbuilder.url(url);
+        super.request = requestbuilder.build();
     }
 }

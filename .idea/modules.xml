@@ -3,7 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MyOkhttpUtils.iml" filepath="$PROJECT_DIR$/MyOkhttpUtils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MyOkhttpUtils.iml" filepath="$PROJECT_DIR$/MyOkhttpUtils.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/httputils/httputils.iml" filepath="$PROJECT_DIR$/httputils/httputils.iml" />
       <module fileurl="file://$PROJECT_DIR$/httputils/httputils.iml" filepath="$PROJECT_DIR$/httputils/httputils.iml" />
     </modules>
   </component>
