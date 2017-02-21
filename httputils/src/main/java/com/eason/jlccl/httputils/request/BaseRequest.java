@@ -1,6 +1,7 @@
 package com.eason.jlccl.httputils.request;
 
 import com.eason.jlccl.httputils.Ok;
+import com.eason.jlccl.httputils.callback.CallBack;
 import com.eason.jlccl.httputils.headerparams.Param;
 
 import java.io.IOException;
@@ -32,42 +33,8 @@ public abstract class BaseRequest<T extends BaseRequest> {
                 header(header.getKey(), header.getValue());
             }
         }
-        if (Ok.getCommonParams() != null) {
-            for (Param param : params) {
-                param(param.getKey(), param.getValue());
-            }
-        }
     }
 
-    public T param(String key, String value) {
-        params.add(new Param(key, value));
-        return (T) this;
-    }
-
-    public T param(String key, boolean value) {
-        params.add(new Param(key, String.valueOf(value)));
-        return (T) this;
-    }
-
-    public T param(String key, int value) {
-        params.add(new Param(key, String.valueOf(value)));
-        return (T) this;
-    }
-
-    public T param(String key, long value) {
-        params.add(new Param(key, String.valueOf(value)));
-        return (T) this;
-    }
-
-    public T param(String key, float value) {
-        params.add(new Param(key, String.valueOf(value)));
-        return (T) this;
-    }
-
-    public T param(String key, double value) {
-        params.add(new Param(key, String.valueOf(value)));
-        return (T) this;
-    }
 
     public T header(String key, String value) {
         headers.put(key, value);
@@ -84,12 +51,11 @@ public abstract class BaseRequest<T extends BaseRequest> {
     public void call(final CallBack callBack) {
         Ok.getInstance().newCall(request).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
+            public void onFailure(Call call, final IOException e) {
                 Ok.getmHandler().post(new Runnable() {
                     @Override
                     public void run() {
-                        callBack.fail();
+                        callBack.fail(e);
                     }
                 });
             }

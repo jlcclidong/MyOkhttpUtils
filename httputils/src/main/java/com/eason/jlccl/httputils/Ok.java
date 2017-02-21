@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 
 import com.eason.jlccl.httputils.headerparams.Param;
 import com.eason.jlccl.httputils.request.GetRequest;
+import com.eason.jlccl.httputils.request.PostFileRequest;
+import com.eason.jlccl.httputils.request.PostJsonRequest;
 import com.eason.jlccl.httputils.request.PostRequest;
 import com.eason.jlccl.httputils.utils.Log;
 
@@ -134,5 +136,19 @@ public class Ok {
      */
     public static PostRequest post() {
         return new PostRequest();
+    }
+
+    /**
+     * postjson
+     */
+    public static PostJsonRequest postJson() {
+        return new PostJsonRequest();
+    }
+
+    /**
+     * postfile
+     */
+    public static PostFileRequest postFile() {
+        return new PostFileRequest();
     }
 }

@@ -22,7 +22,7 @@ import okhttp3.RequestBody;
  * Created by jlccl on 2017/2/19.
  */
 
-public class PostRequest extends BaseRequest<PostRequest> {
+public class PostRequest extends BaseParamRequest<PostRequest> {
     private List<FileParam> files;
 
     @Override
@@ -98,6 +98,16 @@ public class PostRequest extends BaseRequest<PostRequest> {
     public PostRequest file(String key, File file) {
         if (files == null) files = new ArrayList<>();
         files.add(new FileParam(key, file));
+        return this;
+    }
+
+    public PostRequest file(String key, List<File> file) {
+        if (file != null && file.size() > 0) {
+            if (files == null) files = new ArrayList<>();
+            for (File file1 : file) {
+                files.add(new FileParam(key, file1));
+            }
+        }
         return this;
     }
 }

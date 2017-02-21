@@ -7,6 +7,7 @@ import com.eason.jlccl.httputils.utils.JsonFormat;
 import com.eason.jlccl.httputils.utils.Log;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -21,12 +22,16 @@ import okhttp3.ResponseBody;
 
 public class LogInterceptor implements Interceptor {
 
+
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
+        long requestTime = System.nanoTime();
         logForRequest(request);
         Response response = chain.proceed(request);
-        return logForResponse(response);
+        long responseTime = System.nanoTime();
+        long time = TimeUnit.NANOSECONDS.toMillis(responseTime - requestTime);
+        return logForResponse(response, time);
     }
 
 
@@ -43,7 +48,7 @@ public class LogInterceptor implements Interceptor {
         }
     }
 
-    private Response logForResponse(Response response) {
+    private Response logForResponse(Response response, long time) {
         try {
             Log.e("============response start==============");
             //response.body().string()只能调用一次 body()就会关掉
@@ -51,6 +56,7 @@ public class LogInterceptor implements Interceptor {
             Response copy = response.newBuilder().build();
             Log.e("responseurl:" + copy.request().url());
             Log.e("response code:" + copy.code());
+            Log.e("total time:" + time);
             if (!TextUtils.isEmpty(copy.message()))
                 Log.e("message:" + copy.message());
             if (copy.headers() != null && copy.headers().size() > 0)

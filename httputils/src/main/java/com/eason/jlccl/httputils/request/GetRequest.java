@@ -10,7 +10,7 @@ import okhttp3.Request;
  * Created by jlccl on 2017/2/18.
  */
 
-public class GetRequest extends BaseRequest<GetRequest> {
+public class GetRequest extends BaseParamRequest<GetRequest> {
 
     @Override
     public GetRequest build() {
