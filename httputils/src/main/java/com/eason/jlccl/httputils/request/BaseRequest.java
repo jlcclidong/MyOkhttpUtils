@@ -1,13 +1,10 @@
 package com.eason.jlccl.httputils.request;
 
 import com.eason.jlccl.httputils.Ok;
-import com.eason.jlccl.httputils.callback.CallBack;
-import com.eason.jlccl.httputils.headerparams.Param;
+import com.eason.jlccl.httputils.callback.BaseCallBack;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import okhttp3.Call;
@@ -20,18 +17,21 @@ import okhttp3.Response;
  */
 
 public abstract class BaseRequest<T extends BaseRequest> {
-    protected List<Param> params;
+
     protected LinkedHashMap<String, String> headers;
     protected String url;
     protected Request request;
     protected Object tag;
 
     public BaseRequest() {
-        params = new ArrayList<>();
         headers = new LinkedHashMap<>();
         if (Ok.getCommonHeaders() != null) {
-            for (Map.Entry<String, String> header : headers.entrySet()) {
-                header(header.getKey(), header.getValue());
+            try {
+                for (Map.Entry<String, String> header : headers.entrySet()) {
+                    header(header.getKey(), header.getValue());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -53,7 +53,10 @@ public abstract class BaseRequest<T extends BaseRequest> {
     }
 
     public T build() {
-        Request.Builder requestbuilder = new Request.Builder().tag(tag);
+        Request.Builder requestbuilder = new Request.Builder();
+        if (tag != null) {
+            requestbuilder.tag(tag);
+        }
         if (headers != null) {
             for (Map.Entry<String, String> header : headers.entrySet()) {
                 requestbuilder.header(header.getKey(), header.getValue());
@@ -75,7 +78,7 @@ public abstract class BaseRequest<T extends BaseRequest> {
      *
      * @param callBack callback返回String结果 jsonCallBack返回Gson解析对象
      */
-    public void call(final CallBack callBack) {
+    public void call(final BaseCallBack callBack) {
         Ok.getInstance().newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, final IOException e) {
@@ -83,17 +86,26 @@ public abstract class BaseRequest<T extends BaseRequest> {
             }
 
             @Override
-            public void onResponse(Call call, final Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    final String content = response.body().string();
-                    Ok.getmHandler().post(new Runnable() {
-                        @Override
-                        public void run() {
-                            callBack.success(content);
-                        }
-                    });
-                } else {
-                    callBack.fail(response);
+            public void onResponse(final Call call, final Response response) throws IOException {
+                try {
+                    if (response.isSuccessful()) {
+                        Ok.getmHandler().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    callBack.success(response);
+                                } catch (IOException e) {
+
+                                }
+
+                            }
+                        });
+                    } else {
+                        callBack.fail(new Exception(""));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    callBack.fail(new Exception(""));
                 }
             }
         });

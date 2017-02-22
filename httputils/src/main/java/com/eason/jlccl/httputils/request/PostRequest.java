@@ -39,8 +39,6 @@ public class PostRequest extends BaseParamRequest<PostRequest> {
                 if (file.getFile().exists() && file.getFile().isFile()) {
                     RequestBody body = RequestBody.create(MediaType.parse(getContentType(file.getFile().getAbsolutePath())), file.getFile());
                     builder.addFormDataPart(file.getKey(), getFileName(file.getFile()), body);
-                } else {
-                    continue;
                 }
             }
             requestBody = builder.build();

@@ -1,5 +1,7 @@
 package com.eason.jlccl.httputils.request;
 
+import com.eason.jlccl.httputils.utils.Log;
+
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.FileNameMap;
@@ -18,11 +20,11 @@ public class PostFileRequest extends BaseParamRequest<PostFileRequest> {
 
     private File content;
 
-
     @Override
     protected void buildBody(Request.Builder requestbuilder) {
         if (content == null) {
-            throw new NullPointerException("Fill can not be null!");
+            Log.e("File is NULL");
+            super.request = requestbuilder.url(url).get().build();
         }
         RequestBody body = RequestBody.create(MediaType.parse(getContentType(content.getAbsolutePath())), content);
         super.request = requestbuilder.url(url).post(body).build();

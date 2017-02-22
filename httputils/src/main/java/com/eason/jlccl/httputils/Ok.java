@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 
 import com.eason.jlccl.httputils.headerparams.Param;
+import com.eason.jlccl.httputils.request.FileRequest;
 import com.eason.jlccl.httputils.request.GetRequest;
 import com.eason.jlccl.httputils.request.PostFileRequest;
 import com.eason.jlccl.httputils.request.PostJsonRequest;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Call;
 import okhttp3.CookieJar;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -150,5 +152,41 @@ public class Ok {
      */
     public static PostFileRequest postFile() {
         return new PostFileRequest();
+    }
+
+    /**
+     * download
+     */
+    public static FileRequest download() {
+        return new FileRequest();
+    }
+
+    /**
+     * 根據tag來取消請求 如果請求已經完成不能取消
+     * cancleTag
+     */
+    public static void cancle(Object object) {
+        if (object == null) {
+            return;
+        }
+        //隊列中的call
+        for (Call call : getInstance().dispatcher().queuedCalls()) {
+            if (object.equals(call.request().tag())) {
+                call.cancel();
+            }
+        }
+        //運行中的call
+        for (Call call : getInstance().dispatcher().runningCalls()) {
+            if (object.equals(call.request().tag())) {
+                call.cancel();
+            }
+        }
+    }
+
+    /**
+     * 取消所有請求
+     */
+    public static void cancleAll() {
+        getInstance().dispatcher().cancelAll();
     }
 }

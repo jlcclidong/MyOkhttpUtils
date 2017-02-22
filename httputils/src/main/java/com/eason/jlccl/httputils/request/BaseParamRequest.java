@@ -3,12 +3,18 @@ package com.eason.jlccl.httputils.request;
 import com.eason.jlccl.httputils.Ok;
 import com.eason.jlccl.httputils.headerparams.Param;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by cclej on 2017/2/21.
  */
 
 public abstract class BaseParamRequest<T> extends BaseRequest<BaseParamRequest<T>> {
+    protected List<Param> params;
+
     public BaseParamRequest() {
+        params = new ArrayList<>();
         if (Ok.getCommonParams() != null) {
             for (Param param : params) {
                 param(param.getKey(), param.getValue());
