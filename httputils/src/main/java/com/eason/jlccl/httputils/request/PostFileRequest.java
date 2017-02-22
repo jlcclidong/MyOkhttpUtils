@@ -13,6 +13,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 
 /**
+ * post文件构建
  * Created by jlccl on 2017/2/19.
  */
 

@@ -5,6 +5,7 @@ import com.eason.jlccl.httputils.headerparams.Param;
 import okhttp3.Request;
 
 /**
+ * get请求构建
  * Created by jlccl on 2017/2/18.
  */
 

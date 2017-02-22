@@ -12,6 +12,7 @@ import java.io.InputStream;
 import okhttp3.Response;
 
 /**
+ * 文件下载callback 实现进度下载
  * Created by cclej on 2017/2/22.
  */
 

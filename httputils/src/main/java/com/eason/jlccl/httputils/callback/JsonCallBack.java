@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import java.lang.reflect.ParameterizedType;
 
 /**
+ * 将结果转换成json 并未处理string过大oom情况如果出现可以使用流形式转换
  * Created by cclej on 2017/2/21.
  */
 

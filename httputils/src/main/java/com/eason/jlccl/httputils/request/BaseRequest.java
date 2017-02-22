@@ -27,7 +27,7 @@ public abstract class BaseRequest<T extends BaseRequest> {
         headers = new LinkedHashMap<>();
         if (Ok.getCommonHeaders() != null) {
             try {
-                for (Map.Entry<String, String> header : headers.entrySet()) {
+                for (Map.Entry<String, String> header : Ok.getCommonHeaders().entrySet()) {
                     header(header.getKey(), header.getValue());
                 }
             } catch (Exception e) {
@@ -82,7 +82,7 @@ public abstract class BaseRequest<T extends BaseRequest> {
         Ok.getInstance().newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, final IOException e) {
-                e.printStackTrace();
+                callBack.fail(e);
             }
 
             @Override
@@ -95,17 +95,23 @@ public abstract class BaseRequest<T extends BaseRequest> {
                                 try {
                                     callBack.success(response);
                                 } catch (IOException e) {
-
+                                    callBack.fail(e);
                                 }
 
                             }
                         });
                     } else {
-                        callBack.fail(new Exception(""));
+                        int responseCode = response.code();
+                        String message;
+                        if (responseCode >= 400 && responseCode < 500) {
+                            message = "客户端错误";
+                        } else {
+                            message = "服务其错误";
+                        }
+                        callBack.fail(new Exception(responseCode + message));
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    callBack.fail(new Exception(""));
+                    callBack.fail(e);
                 }
             }
         });

@@ -5,6 +5,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 
 /**
+ * postjson构建
  * Created by cclej on 2017/2/21.
  */
 

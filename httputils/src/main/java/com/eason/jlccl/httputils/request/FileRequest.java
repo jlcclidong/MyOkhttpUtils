@@ -3,6 +3,7 @@ package com.eason.jlccl.httputils.request;
 import okhttp3.Request;
 
 /**
+ * 文件下载请求
  * Created by cclej on 2017/2/22.
  */
 

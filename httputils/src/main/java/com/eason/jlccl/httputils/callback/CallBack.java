@@ -5,6 +5,7 @@ import java.io.IOException;
 import okhttp3.Response;
 
 /**
+ * String callback
  * Created by jlccl on 2017/2/19.
  */
 

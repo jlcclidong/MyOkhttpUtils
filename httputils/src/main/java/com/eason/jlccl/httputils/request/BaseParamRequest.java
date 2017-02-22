@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 支持带param的父类请求
  * Created by cclej on 2017/2/21.
  */
 
@@ -16,7 +17,7 @@ public abstract class BaseParamRequest<T> extends BaseRequest<BaseParamRequest<T
     public BaseParamRequest() {
         params = new ArrayList<>();
         if (Ok.getCommonParams() != null) {
-            for (Param param : params) {
+            for (Param param : Ok.getCommonParams()) {
                 param(param.getKey(), param.getValue());
             }
         }

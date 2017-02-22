@@ -18,6 +18,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 
 /**
+ * post请求支持表单+文件上传
  * Created by jlccl on 2017/2/19.
  */
 

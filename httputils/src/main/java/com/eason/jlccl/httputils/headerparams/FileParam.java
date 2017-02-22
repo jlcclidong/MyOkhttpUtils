@@ -3,6 +3,7 @@ package com.eason.jlccl.httputils.headerparams;
 import java.io.File;
 
 /**
+ * Fileparam实体类
  * Created by jlccl on 2017/2/19.
  */
 

@@ -11,6 +11,7 @@ import com.eason.jlccl.httputils.request.GetRequest;
 import com.eason.jlccl.httputils.request.PostFileRequest;
 import com.eason.jlccl.httputils.request.PostJsonRequest;
 import com.eason.jlccl.httputils.request.PostRequest;
+import com.eason.jlccl.httputils.utils.HeadersUtils;
 import com.eason.jlccl.httputils.utils.Log;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class Ok {
     private static Map<String, String> headers;
     private static List<Param> params;
     private static Handler mHandler;
+    private static Context mContext;
 
     private Ok(Builder builder) {
         this.builder = builder.builder;
@@ -41,6 +43,7 @@ public class Ok {
 
     public static Builder init(Context context) {
         mHandler = new Handler(Looper.getMainLooper());
+        mContext = context;
         return new Ok.Builder();
     }
 
@@ -54,6 +57,10 @@ public class Ok {
         else return okHttpClient;
     }
 
+    public static Context getContext() {
+        return mContext;
+    }
+
     /**
      * ok构建
      */
@@ -65,6 +72,9 @@ public class Ok {
             builder = new OkHttpClient.Builder();
             builder.connectTimeout(10000L, TimeUnit.MILLISECONDS);
             builder.readTimeout(10000L, TimeUnit.MILLISECONDS);
+            if (headers == null) headers = new LinkedHashMap<>();
+            headers.put("Accept-Language", HeadersUtils.getAcceptLanguage());
+            headers.put("User-Agent", HeadersUtils.getUserAgent());
         }
 
         public Builder connectTimeout(long timeout, TimeUnit unit) {
@@ -95,7 +105,6 @@ public class Ok {
         }
 
         public Builder commonHeader(String key, String value) {
-            if (headers == null) headers = new LinkedHashMap<>();
             headers.put(key, value);
             return this;
         }
