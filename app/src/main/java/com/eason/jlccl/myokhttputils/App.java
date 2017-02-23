@@ -19,8 +19,8 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         Ok.init(this)
-                .connectTimeout(1000l, TimeUnit.MILLISECONDS)
-                .readTimeout(1000l, TimeUnit.MILLISECONDS)
+                .connectTimeout(3000l, TimeUnit.MILLISECONDS)
+                .readTimeout(3000l, TimeUnit.MILLISECONDS)
                 .AppInterceptor("eason", new LogInterceptor())
                 .CookieJar(new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(App.this)))
                 .build();
